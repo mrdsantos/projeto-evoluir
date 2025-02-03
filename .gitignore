@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignorar variáveis de ambiente
+.env.local
+.env.development
+.env.production
+
+# Ignorar configurações do Firebase
+lib/firebaseConfig.ts
+
+# Ignorar dependências e builds
+node_modules/
+.next/
+out/
+
+# Ignorar arquivos do sistema operacional
+.DS_Store
+Thumbs.db
