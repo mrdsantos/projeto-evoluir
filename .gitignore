@@ -46,7 +46,7 @@ next-env.d.ts
 .env.production
 
 # Ignorar configurações do Firebase
-lib/firebaseConfig.ts
+lib/firebaseConfig.tsx
 
 # Ignorar dependências e builds
 node_modules/
