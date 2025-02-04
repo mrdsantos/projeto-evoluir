@@ -71,8 +71,16 @@ export function useLessons() {
     setLoading(true)
     setError(null)
     try {
-      //
-      return
+      const lessonRef = doc(db, "courses", courseId, "lessons", lessonId);
+      const lessonSnap = await getDoc(lessonRef)
+      await deleteDoc(lessonRef);
+
+      if (!lessonSnap.exists()) {
+        setError("Aula não encontrada");
+        console.warn("Aula não encontrada no Firestore");
+
+        return
+      }
     } catch (error) {
       setError("Erro ao excluir aula")
     } finally {
