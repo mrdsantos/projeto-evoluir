@@ -53,3 +53,6 @@ out/
 # Ignorar arquivos do sistema operacional
 .DS_Store
 Thumbs.db
+
+# Ignorar arquivos de misc
+misc/
