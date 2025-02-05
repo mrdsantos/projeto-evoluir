@@ -10,7 +10,7 @@ import {
     User 
 } from "firebase/auth";
 import { app } from "@/lib/firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 
 const auth = getAuth(app);
@@ -20,6 +20,7 @@ interface UserData {
     email: string;
     name: string;
     role: "aluno" | "agente" | "superuser";
+    createdAt: number;
 }
 
 interface AuthContextType {
@@ -27,7 +28,7 @@ interface AuthContextType {
     userData: UserData | null;
     loading: boolean;
     login: (email: string, password: string) => Promise<void>;
-    signup: (email: string, password: string) => Promise<void>;
+    signup: (email: string, password: string, name: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -63,8 +64,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         await signInWithEmailAndPassword(auth, email, password);
     };
 
-    const signup = async (email: string, password: string) => {
-        await createUserWithEmailAndPassword(auth, email, password);
+    const signup = async (email: string, password: string, name: string) => {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const newUser = userCredential.user;
+
+        // Criar usuário no Firestore
+        const userData: UserData = {
+            uid: newUser.uid,
+            email,
+            name,
+            role: "aluno",
+            createdAt: Date.now(),
+        };
+
+        await setDoc(doc(db, "users", newUser.uid), userData);
+        setUserData(userData);
     };
 
     const logout = async () => {
