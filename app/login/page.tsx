@@ -31,8 +31,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-80">
+    <div className="flex items-center justify-center min-h-screen">
+      <form onSubmit={handleSubmit} className="p-6 rounded-lg shadow-md w-80">
         <h2 className="text-xl font-semibold text-center mb-4">Login</h2>
         <input
           type="email"
@@ -50,10 +50,11 @@ export default function LoginPage() {
           className="w-full p-2 border rounded mb-2"
           required
         />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        <button type="submit" className="w-full p-2 rounded ">
           Entrar
         </button>
       </form>
+      <button className="daisy-btn daisy-btn-primary">Botao daisy </button>
     </div>
   );
 }
