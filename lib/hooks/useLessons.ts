@@ -8,7 +8,7 @@ interface Lesson {
   id: string;
   courseId: string;
   title: string;
-  bodyText: string;
+  content: string;
   videoUrl: string;
   pdfUrl: string;
   order: number;
