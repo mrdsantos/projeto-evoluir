@@ -8,7 +8,6 @@ import { db } from "@/lib/firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 
 // Definição da interface para um curso
 interface Course {
@@ -22,23 +21,26 @@ interface Course {
 // Componente de Card de Curso
 const CourseCard = ({ course }: { course: Course }) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-      <img
-        src={course.poster}
-        alt={course.title}
-        className="w-full h-40 object-cover"
-      />
-      <div className="p-4">
-        <h3 className="text-lg font-semibold">{course.title}</h3>
-        <p className="text-sm text-gray-600">{course.description}</p>
-        <Link href={`/course/${course.id}`} className="block mt-2 text-blue-600 hover:underline">
+    <div className="daisy-card bg-base-100 shadow-xl w-96">
+      <figure>
+        <img
+          src={course.poster}
+          alt={course.title}
+          className="w-full h-40 object-cover"
+        />
+      </figure>
+      <div className="daisy-card-body">
+        <h2 className="daisy-card-title">{course.title}</h2>
+        <p>{course.description}</p>
+        <div className="daisy-card-actions justify-end">
+          <Link href={`/courses/${course.id}`} className="daisy-btn daisy-btn-primary">
             Acessar o curso
-        </Link>
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
-
 
 const Dashboard = () => {
   // Utiliza o hook de guarda de autenticação para garantir que o usuário esteja logado
@@ -87,7 +89,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen p-6">
       <div className="container mx-auto">
         {/* Header com boas-vindas e logout */}
         <div className="flex justify-between items-center mb-6">
@@ -96,29 +98,22 @@ const Dashboard = () => {
               Bem-vindo de volta, {userData?.name || "Aluno"}!
             </h1>
           </div>
-          <button
-            onClick={handleLogout}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-          >
+          <button onClick={handleLogout} className="daisy-btn daisy-btn-primary">
             Sair
           </button>
         </div>
 
         {/* Mensagem de erro */}
-        {error && (
-          <div className="bg-red-100 text-red-800 p-4 rounded-md mb-4">
-            {error}
-          </div>
-        )}
+        {error && <div className="daisy-alert daisy-alert-error">{error}</div>}
 
         {/* Lista de cursos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {coursesLoading ? (
-            <div className="col-span-full text-center text-lg text-gray-500">
+            <div className="col-span-full text-center text-lg">
               Carregando cursos...
             </div>
           ) : courses.length === 0 ? (
-            <div className="col-span-full text-center text-lg text-gray-500">
+            <div className="col-span-full text-center text-lg">
               Nenhum curso disponível no momento.
             </div>
           ) : (
