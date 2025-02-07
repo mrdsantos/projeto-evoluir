@@ -13,8 +13,8 @@ const config: Config = {
     daisyui
   ],
   daisyui: {
-    themes: ["emerald", "dim"],
-    darkTheme: "dim",
+    themes: ["halloween"],
+    // darkTheme: "dim",
     base: true,
     styled: true,
     utils: true,
