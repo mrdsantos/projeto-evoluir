@@ -21,7 +21,7 @@ interface Course {
 // Componente de Card de Curso
 const CourseCard = ({ course }: { course: Course }) => {
   return (
-    <div className="daisy-card bg-base-100 shadow-xl w-96">
+    <div className="card bg-base-100 shadow-xl w-96">
       <figure>
         <img
           src={course.poster}
@@ -29,11 +29,11 @@ const CourseCard = ({ course }: { course: Course }) => {
           className="w-full h-40 object-cover"
         />
       </figure>
-      <div className="daisy-card-body">
-        <h2 className="daisy-card-title">{course.title}</h2>
+      <div className="card-body">
+        <h2 className="card-title">{course.title}</h2>
         <p>{course.description}</p>
-        <div className="daisy-card-actions justify-end">
-          <Link href={`/courses/${course.id}`} className="daisy-btn daisy-btn-primary">
+        <div className="card-actions justify-end">
+          <Link href={`/courses/${course.id}`} className="btn btn-primary">
             Acessar o curso
           </Link>
         </div>
@@ -98,13 +98,13 @@ const Dashboard = () => {
               Bem-vindo de volta, {userData?.name || "Aluno"}!
             </h1>
           </div>
-          <button onClick={handleLogout} className="daisy-btn daisy-btn-primary">
+          <button onClick={handleLogout} className="btn btn-primary">
             Sair
           </button>
         </div>
 
         {/* Mensagem de erro */}
-        {error && <div className="daisy-alert daisy-alert-error">{error}</div>}
+        {error && <div className="alert alert-error">{error}</div>}
 
         {/* Lista de cursos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
