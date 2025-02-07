@@ -54,7 +54,7 @@ export default function LoginPage() {
           Entrar
         </button>
       </form>
-      <button className="daisy-btn daisy-btn-primary">Botao daisy </button>
+      <button className="btn btn-primary">Botao daisy </button>
     </div>
   );
 }
