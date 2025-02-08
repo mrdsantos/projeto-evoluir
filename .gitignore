@@ -56,3 +56,4 @@ Thumbs.db
 
 # Ignorar arquivos de misc
 misc/
+.env*.local
