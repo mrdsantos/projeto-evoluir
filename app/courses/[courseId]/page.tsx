@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// Coloque "use client" no início para marcar como Client Component
 "use client";
 
-import { useParams } from "next/navigation"; // Usando useParams ao invés de useRouter
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
@@ -16,7 +15,8 @@ interface Course {
 }
 
 const CoursePage = () => {
-  const { courseId } = useParams(); // Obtendo o courseId diretamente dos parâmetros
+  const { courseId } = useParams();
+  const router = useRouter();
 
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,13 +48,28 @@ const CoursePage = () => {
     fetchCourseData();
   }, [courseId]);
 
-  if (loading) return <div>Carregando...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="text-center text-info">Carregando...</div>;
+  if (error) return <div className="text-center text-error">{error}</div>;
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold">{course?.title}</h1>
-      <p>{course?.description}</p>
+    <div className="container mx-auto p-6 flex flex-col items-center">
+      <div className="card w-full bg-base-200 shadow-xl p-6">
+        <figure>
+          <img src={course?.poster} alt={course?.title} className="rounded-lg" />
+        </figure>
+        <div className="card-body text-center">
+          <h1 className="text-3xl font-bold text-primary">{course?.title}</h1>
+          <p className="text-base-content mt-2">{course?.description}</p>
+          <div className="card-actions justify-center mt-4">
+            <button 
+              className="btn btn-primary"
+              onClick={() => router.push(`/courses/course1/lessons/lesson1`)}
+            >
+              Acessar Lição
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

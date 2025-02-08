@@ -21,7 +21,7 @@ interface Course {
 // Componente de Card de Curso
 const CourseCard = ({ course }: { course: Course }) => {
   return (
-    <div className="card bg-base-100 shadow-xl w-96">
+    <div className="card bg-base-100 shadow-xl w-96 hover:shadow-2xl transition-shadow">
       <figure>
         <img
           src={course.poster}
@@ -31,7 +31,7 @@ const CourseCard = ({ course }: { course: Course }) => {
       </figure>
       <div className="card-body">
         <h2 className="card-title">{course.title}</h2>
-        <p>{course.description}</p>
+        <p className="text-sm text-neutral-content">{course.description}</p>
         <div className="card-actions justify-end">
           <Link href={`/courses/${course.id}`} className="btn btn-primary">
             Acessar o curso
@@ -43,7 +43,6 @@ const CourseCard = ({ course }: { course: Course }) => {
 };
 
 const Dashboard = () => {
-  // Utiliza o hook de guarda de autenticação para garantir que o usuário esteja logado
   const { user, loading } = useAuthGuard();
   const { userData, logout } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
@@ -51,9 +50,8 @@ const Dashboard = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Busca os cursos somente quando o usuário estiver autenticado
   useEffect(() => {
-    if (!user) return; // Aguarda até que o usuário esteja autenticado
+    if (!user) return;
 
     const fetchCourses = async () => {
       try {
@@ -76,31 +74,50 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/login"); // Redireciona para a página de login após logout
+    router.push("/login");
   };
 
-  // Se a autenticação ainda estiver carregando, exibe uma mensagem de carregamento
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Carregando autenticação...
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-6 bg-base-200">
       <div className="container mx-auto">
         {/* Header com boas-vindas e logout */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center bg-base-100 shadow-md p-6 rounded-lg mb-6">
           <div>
             <h1 className="text-2xl font-bold">
               Bem-vindo de volta, {userData?.name || "Aluno"}!
             </h1>
+            <p className="text-sm text-neutral-content">Vamos continuar aprendendo!</p>
           </div>
-          <button onClick={handleLogout} className="btn btn-primary">
+          <button onClick={handleLogout} className="btn btn-error">
             Sair
           </button>
+        </div>
+
+        {/* Resumo rápido */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div className="stat bg-primary text-primary-content rounded-lg p-4">
+            <div className="stat-title">Cursos disponíveis</div>
+            <div className="stat-value">{courses.length}</div>
+            <div className="stat-desc">Novos cursos em breve!</div>
+          </div>
+          <div className="stat bg-accent text-accent-content rounded-lg p-4">
+            <div className="stat-title">Progresso geral</div>
+            <div className="stat-value">68%</div>
+            <div className="stat-desc">Continue estudando!</div>
+          </div>
+          <div className="stat bg-success text-success-content rounded-lg p-4">
+            <div className="stat-title">Certificados emitidos</div>
+            <div className="stat-value">12</div>
+            <div className="stat-desc">Parabéns pelos seus certificados!</div>
+          </div>
         </div>
 
         {/* Mensagem de erro */}
@@ -110,7 +127,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {coursesLoading ? (
             <div className="col-span-full text-center text-lg">
-              Carregando cursos...
+              <span className="loading loading-spinner loading-lg"></span>
             </div>
           ) : courses.length === 0 ? (
             <div className="col-span-full text-center text-lg">
