@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useAuth } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import login2 from "@/public/login-image-2.jpg"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -33,16 +31,18 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="">
-      <div className="rounded-md shadow-md flex flex-row flex-wrap justify-items-center justify-center bg-base-300 w-2/5 ">
-        <form onSubmit={handleSubmit} className="rounded-lg w-2/4 flex flex-col gap-y-4">
-          <h2 className="text-xl font-semibold text-center mb-4">Login</h2>
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-r from-primary to-accent p-4 -m-5">
+      <div className="rounded-xl shadow-xl bg-base-100 p-10 w-full max-w-md space-y-6 transform hover:scale-105 transition-all duration-300">
+        <h2 className="text-4xl font-bold text-center text-primary">Bem-vindo de volta!</h2>
+        <p className="text-center text-accent mb-6">Faça login para acessar o painel.</p>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <input
             type="email"
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded mb-2"
+            className="input input-bordered input-primary w-full transition-all duration-200 hover:border-primary-focus"
             required
           />
           <input
@@ -50,26 +50,25 @@ export default function LoginPage() {
             placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded mb-2"
+            className="input input-bordered input-primary w-full transition-all duration-200 hover:border-primary-focus"
             required
           />
-          <div className="flex flex-row gap-6 items-center justify-center">
-            <button type="submit" className="btn btn-md btn-primary text-primary-content rounded-md">
-              Entrar
-            </button>
-            <button type="reset" className="btn btn-md btn-secondary text-secondary-content rounded-md">
-              Esqueci minha senha
+          
+          <button type="submit" className="btn btn-primary text-primary-content w-full hover:bg-primary-focus mb-4">
+            Entrar
+          </button>
+          
+          <button type="reset" className="btn btn-secondary text-secondary-content w-full hover:bg-secondary-focus mb-4">
+            Esqueci minha senha
+          </button>
+          
+          <div className="flex justify-center items-center">
+            <span className="text-base text-accent mr-2">Não tem uma conta?</span>
+            <button className="btn btn-link text-accent">
+              Cadastre-se
             </button>
           </div>
         </form>
-        <div className="h-48 w-48">
-          <Image
-            src={login2}
-            layout="responsive"
-            alt=""
-            className="rounded-lg shadow-md"
-          />
-        </div>
       </div>
     </main>
   );

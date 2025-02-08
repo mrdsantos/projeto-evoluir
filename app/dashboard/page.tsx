@@ -21,7 +21,7 @@ interface Course {
 // Componente de Card de Curso
 const CourseCard = ({ course }: { course: Course }) => {
   return (
-    <div className="card bg-base-100 shadow-xl w-96 hover:shadow-2xl transition-shadow">
+    <div className="card bg-neutral text-neutral-content shadow-xl w-96 hover:shadow-2xl transition-shadow">
       <figure>
         <img
           src={course.poster}
@@ -31,7 +31,7 @@ const CourseCard = ({ course }: { course: Course }) => {
       </figure>
       <div className="card-body">
         <h2 className="card-title">{course.title}</h2>
-        <p className="text-sm text-neutral-content">{course.description}</p>
+        <p className="text-sm">{course.description}</p>
         <div className="card-actions justify-end">
           <Link href={`/courses/${course.id}`} className="btn btn-primary">
             Acessar o curso
@@ -89,12 +89,12 @@ const Dashboard = () => {
     <div className="min-h-screen p-6 bg-base-200">
       <div className="container mx-auto">
         {/* Header com boas-vindas e logout */}
-        <div className="flex justify-between items-center bg-base-100 shadow-md p-6 rounded-lg mb-6">
+        <div className="flex justify-between items-center bg-neutral text-neutral-content shadow-md p-6 rounded-lg mb-6">
           <div>
             <h1 className="text-2xl font-bold">
               Bem-vindo de volta, {userData?.name || "Aluno"}!
             </h1>
-            <p className="text-sm text-neutral-content">Vamos continuar aprendendo!</p>
+            <p className="text-sm">Vamos continuar aprendendo!</p>
           </div>
           <button onClick={handleLogout} className="btn btn-error">
             Sair
