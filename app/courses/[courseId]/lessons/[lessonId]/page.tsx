@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useParams } from "next/navigation"; // Alterado para useParams
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 interface Lesson {
   id: string;
@@ -15,14 +16,15 @@ interface Lesson {
 }
 
 const LessonPage = () => {
-  const { courseId, lessonId } = useParams(); // Usando useParams para acessar os parâmetros da URL
+  const { user, loading: authLoading } = useAuthGuard();
+  const { courseId, lessonId } = useParams();
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!lessonId || !courseId) return;
+    if (!user || !lessonId || !courseId) return;
 
     const fetchLessonData = async () => {
       setLoading(true);
@@ -45,15 +47,16 @@ const LessonPage = () => {
     };
 
     fetchLessonData();
-  }, [courseId, lessonId]);
+  }, [user, courseId, lessonId]);
 
-  if (loading) return <div className="flex justify-center items-center min-h-screen text-primary text-lg">Carregando...</div>;
+  if (authLoading || loading)
+    return <div className="flex justify-center items-center min-h-screen text-primary text-lg">Carregando...</div>;
   if (error) return <div className="flex justify-center items-center min-h-screen text-error text-lg">{error}</div>;
 
   return (
     <div className="container mx-auto p-6 bg-base-100 text-base-content shadow-lg rounded-lg max-w-3xl">
       <h1 className="text-3xl font-bold text-primary mb-4">{lesson?.title}</h1>
-      <p className="text-lg mb-6">{lesson?.content}</p>
+      <p className="text-lg mb-6 text-secondary">{lesson?.content}</p>
       <div className="flex justify-center">
         <iframe
           className="w-full max-w-2xl h-64 sm:h-96 rounded-lg"

@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 interface Course {
   id: string;
@@ -15,6 +16,7 @@ interface Course {
 }
 
 const CoursePage = () => {
+  const { user, loading: authLoading } = useAuthGuard();
   const { courseId } = useParams();
   const router = useRouter();
 
@@ -23,7 +25,7 @@ const CoursePage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!courseId) return;
+    if (!user || !courseId) return;
 
     const fetchCourseData = async () => {
       setLoading(true);
@@ -46,9 +48,11 @@ const CoursePage = () => {
     };
 
     fetchCourseData();
-  }, [courseId]);
+  }, [user, courseId]);
 
-  if (loading) return <div className="text-center text-info">Carregando...</div>;
+  if (authLoading || loading)
+    return <div className="text-center text-info">Carregando...</div>;
+
   if (error) return <div className="text-center text-error">{error}</div>;
 
   return (
@@ -63,7 +67,7 @@ const CoursePage = () => {
           <div className="card-actions justify-center mt-4">
             <button 
               className="btn btn-primary"
-              onClick={() => router.push(`/courses/course1/lessons/lesson1`)}
+              onClick={() => router.push(`/courses/${courseId}/lessons/lesson1`)}
             >
               Acessar Lição
             </button>
