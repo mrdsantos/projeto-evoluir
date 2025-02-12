@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -45,8 +46,8 @@ const DashboardAgentes = () => {
             // Adiciona cada submissão pendente ao array de resultados
             submissionsSnapshot.forEach((submissionDoc) => {
               submissionsData.push({
-                id: submissionDoc.id,
                 ...(submissionDoc.data() as Submission),
+                id: submissionDoc.id,
               });
             });
           }
