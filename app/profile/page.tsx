@@ -60,6 +60,7 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null); // Para erros de validação de formulário
   const router = useRouter();
 
   // Recupera os dados do perfil do usuário
@@ -91,6 +92,20 @@ const ProfilePage = () => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile || !userData?.uid) return; // Verificação de userData
+
+    // Validação do formulário
+    if (
+      !profile.name ||
+      !profile.phone ||
+      !profile.whatsapp ||
+      !profile.cpf ||
+      !profile.birthdate
+    ) {
+      setFormError("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    setFormError(null); // Limpa o erro de formulário
 
     try {
       const userDocRef = doc(db, "users", userData.uid);
@@ -162,6 +177,7 @@ const ProfilePage = () => {
         <h1 className="text-3xl font-bold mb-6">Atualizar Perfil</h1>
 
         {error && <div className="alert alert-error mb-4">{error}</div>}
+        {formError && <div className="alert alert-error mb-4">{formError}</div>} {/* Exibe o erro de validação */}
 
         <form onSubmit={handleSave} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -181,6 +197,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 className="input input-bordered w-full"
                 placeholder="Nome completo"
+                required
               />
             </div>
 
@@ -210,6 +227,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 className="input input-bordered w-full"
                 placeholder="Telefone"
+                required
               />
             </div>
 
@@ -224,6 +242,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 className="input input-bordered w-full"
                 placeholder="WhatsApp"
+                required
               />
             </div>
 
@@ -239,6 +258,7 @@ const ProfilePage = () => {
                 className="input input-bordered w-full"
                 placeholder="CPF"
                 maxLength={14}
+                required
               />
             </div>
 
@@ -252,6 +272,7 @@ const ProfilePage = () => {
                 value={profile?.birthdate || ""}
                 onChange={handleChange}
                 className="input input-bordered w-full"
+                required
               />
             </div>
 
@@ -368,9 +389,13 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <button type="submit" className="btn btn-primary">
-              Salvar Alterações
+          <div className="mt-6 flex justify-end">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+            >
+              {loading ? "Salvando..." : "Salvar"}
             </button>
           </div>
         </form>

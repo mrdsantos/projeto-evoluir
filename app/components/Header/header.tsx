@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPalette, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faPalette, faRightToBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 
 export default function Header() {
@@ -55,7 +55,7 @@ export default function Header() {
           <div>
             {/* Outros itens do menu */}
           </div>
-          <div className="navbar-end gap-3">
+          <div className="navbar-end gap-8">
             <div className="flex-col justify-items-center">
               <div className="justify-items-center text-secondary">
                 <FontAwesomeIcon icon={faPalette} size="lg" />
@@ -95,6 +95,18 @@ export default function Header() {
               </div>
             </div>
             {user ? (
+              <Link href="/profile">
+                <div className="flex-col justify-items-center text-secondary cursor-pointer">
+                  <FontAwesomeIcon icon={faUser} size="xl" />
+                  <div className="text-sm mt-1">
+                    Meu Perfil
+                  </div>
+                </div>
+              </Link>) : (
+              null
+            )
+            }
+            {user ? (
               <div
                 onClick={handleAuth}
                 className="flex-col justify-items-center text-secondary cursor-pointer"
@@ -118,9 +130,14 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-items-center">
-        <Breadcrumbs />
-      </div>
+      {user ? (
+        <div className="flex flex-col items-center justify-items-center">
+          <Breadcrumbs />
+        </div>
+      ) : (
+        null
+      )
+      }
     </div>
   );
 }

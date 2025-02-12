@@ -3,12 +3,18 @@
 import { useState } from "react";
 import { useAuth } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { app } from '@/lib/firebase/firebaseConfig';  // Ajuste conforme o seu caminho de configuração do Firebase
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [resetEmailSent, setResetEmailSent] = useState(false);
   const { login, user } = useAuth();
   const router = useRouter();
+
+  const auth = getAuth(app);
 
   if (user) {
     router.push("/dashboard");
@@ -25,6 +31,26 @@ export default function LoginPage() {
         alert("Erro ao fazer login: " + error.message);
       } else {
         console.error("Erro desconhecido ao fazer login", error);
+        alert("Ocorreu um erro desconhecido.");
+      }
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      alert("Por favor, insira seu e-mail.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetEmailSent(true); // Define que o e-mail foi enviado
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Erro ao enviar e-mail de redefinição de senha:", error.message);
+        alert("Erro ao enviar e-mail de redefinição de senha: " + error.message);
+      } else {
+        console.error("Erro desconhecido ao enviar o e-mail de redefinição de senha", error);
         alert("Ocorreu um erro desconhecido.");
       }
     }
@@ -57,16 +83,20 @@ export default function LoginPage() {
           <button type="submit" className="btn btn-primary text-primary-content w-full hover:bg-primary-focus mb-4">
             Entrar
           </button>
-          
-          <button type="reset" className="btn btn-secondary text-secondary-content w-full hover:bg-secondary-focus mb-4">
-            Esqueci minha senha
+
+          <button 
+            type="button" 
+            onClick={handleResetPassword} 
+            className="btn btn-secondary text-secondary-content w-full hover:bg-secondary-focus mb-4"
+          >
+            {resetEmailSent ? "E-mail de redefinição enviado!" : "Esqueci minha senha"}
           </button>
           
           <div className="flex justify-center items-center">
             <span className="text-base text-accent mr-2">Não tem uma conta?</span>
-            <button className="btn btn-link text-accent">
+            <Link href="/cadastro" className="btn btn-link text-accent">
               Cadastre-se
-            </button>
+            </Link>
           </div>
         </form>
       </div>

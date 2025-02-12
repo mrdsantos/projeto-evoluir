@@ -30,17 +30,17 @@ const Breadcrumbs = () => {
 
   return (
     <nav className="text-sm breadcrumbs">
-      <ul className="flex space-x-2 text-primary">
+      <ul className="flex space-x-2">
         {localBreadcrumbs.map((name, index) => {
           // Monta o caminho completo até aquele ponto
           const href = index === 0 ? "/dashboard" : `/courses/${pathname.split("/")[2]}`;
 
           return (
             <li key={index}>
-              <Link href={href} className="hover:underline">
+              <Link href={href} className="badge badge-accent badge-outline">
                 {name}
               </Link>
-              {index < localBreadcrumbs.length - 1 && " / "}
+              {index < localBreadcrumbs.length - 1}
             </li>
           );
         })}
