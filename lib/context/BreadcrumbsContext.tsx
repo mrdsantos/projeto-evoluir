@@ -1,8 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebaseConfig";
+import { createContext, useContext, useState } from "react";
 
 interface BreadcrumbsContextType {
   breadcrumbs: { [key: string]: string };
