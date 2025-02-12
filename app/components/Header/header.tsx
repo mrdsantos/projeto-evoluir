@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPalette, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -40,7 +41,7 @@ export default function Header() {
   };
 
   return (
-    <div className="mb-4 bg-base-300 text-base-content">
+    <div className="">
       <div className="h-20 w-full flex flex-row justify-items-center">
         <Link href={"/"} className="bg-neutral pb-2 pt-3 pr-1 pl-3">
           <div className="flex justify-center items-center bg-primary text-primary-content w-fit h-full text-nowrap text-5xl px-3">
@@ -117,6 +118,7 @@ export default function Header() {
           </div>
         </div>
       </div>
+      <Breadcrumbs />
     </div>
   );
 }
