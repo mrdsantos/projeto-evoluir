@@ -90,11 +90,24 @@ const ProfilePage = () => {
   // Atualiza os dados do perfil no banco de dados
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile) return;
+    if (!profile || !userData?.uid) return; // Verificação de userData
 
     try {
       const userDocRef = doc(db, "users", userData.uid);
-      await updateDoc(userDocRef, profile);
+
+      // Mapear apenas os campos necessários para atualização
+      const updatedProfile = {
+        name: profile.name,
+        phone: profile.phone,
+        whatsapp: profile.whatsapp,
+        cpf: profile.cpf,
+        birthdate: profile.birthdate,
+        address: profile.address,
+      };
+
+      // Passar o objeto atualizado para o Firestore
+      await updateDoc(userDocRef, updatedProfile);
+
       toast.success("Perfil atualizado com sucesso!");
       router.push("/dashboard");
     } catch (err) {
@@ -297,20 +310,7 @@ const ProfilePage = () => {
                 type="text"
                 name="cep"
                 value={profile?.address?.cep ? formatCEP(profile.address.cep) : ""}
-                onChange={(e) => {
-                  const cleaned = e.target.value.replace(/\D/g, "");
-                  setProfile((prev) =>
-                    prev
-                      ? {
-                          ...prev,
-                          address: {
-                            ...prev.address,
-                            cep: cleaned,
-                          },
-                        }
-                      : null
-                  );
-                }}
+                onChange={handleAddressChange}
                 className="input input-bordered w-full"
                 placeholder="CEP"
                 maxLength={9}
@@ -341,7 +341,6 @@ const ProfilePage = () => {
                 onChange={handleAddressChange}
                 className="select select-bordered w-full"
               >
-                <option value="">Selecione o Estado</option>
                 {statesBrazil.map((state) => (
                   <option key={state} value={state}>
                     {state}
@@ -369,9 +368,11 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-            {loading ? "Atualizando..." : "Atualizar Perfil"}
-          </button>
+          <div className="flex justify-end">
+            <button type="submit" className="btn btn-primary">
+              Salvar Alterações
+            </button>
+          </div>
         </form>
       </div>
     </div>

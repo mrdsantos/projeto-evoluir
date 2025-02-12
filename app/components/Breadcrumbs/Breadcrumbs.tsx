@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Link from "next/link";
@@ -8,13 +9,16 @@ import { courseData } from "@/lib/data/coursesData"; // Importa o dicionário de
 
 const Breadcrumbs = () => {
   const pathname = usePathname();
-  const { breadcrumbs } = useBreadcrumbs();
+  const { breadcrumbs, setBreadcrumb } = useBreadcrumbs();
 
+  // Estado local para armazenar os breadcrumbs
   const [localBreadcrumbs, setLocalBreadcrumbs] = useState<string[]>([]);
-  const pathSegments = pathname.split("/").filter(Boolean);
 
   useEffect(() => {
     const newBreadcrumbs: string[] = ["Dashboard"];
+
+    // Calcula os segmentos dentro do useEffect
+    const pathSegments = pathname.split("/").filter(Boolean);
 
     if (pathSegments[0] === "courses" && pathSegments[1]) {
       const courseName = courseData[pathSegments[1]]?.title || "Curso";
@@ -22,20 +26,21 @@ const Breadcrumbs = () => {
     }
 
     setLocalBreadcrumbs(newBreadcrumbs);
-  }, [pathname]);
+  }, [pathname]); // Apenas `pathname` na lista de dependências
 
   return (
     <nav className="text-sm breadcrumbs">
       <ul className="flex space-x-2 text-primary">
         {localBreadcrumbs.map((name, index) => {
-          const href = index === 0 ? "/dashboard" : `/courses/${pathSegments[1]}`;
+          // Monta o caminho completo até aquele ponto
+          const href = index === 0 ? "/dashboard" : `/courses/${pathname.split("/")[2]}`;
 
           return (
             <li key={index}>
               <Link href={href} className="hover:underline">
                 {name}
               </Link>
-              {index < localBreadcrumbs.length - 1 && " > "}
+              {index < localBreadcrumbs.length - 1 && " / "}
             </li>
           );
         })}
