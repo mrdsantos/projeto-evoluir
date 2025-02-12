@@ -31,7 +31,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-r from-primary to-accent p-4 -m-5">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-r from-primary to-accent p-4">
       <div className="rounded-xl shadow-xl bg-base-100 p-10 w-full max-w-md space-y-6 transform hover:scale-105 transition-all duration-300">
         <h2 className="text-4xl font-bold text-center text-primary">Bem-vindo de volta!</h2>
         <p className="text-center text-accent mb-6">Faça login para acessar o painel.</p>

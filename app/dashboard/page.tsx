@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -86,7 +86,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-base-200">
+    <div className="min-h-screen p-6 bg-base-100">
       <div className="container mx-auto">
         {/* Header com boas-vindas e logout */}
         <div className="flex justify-between items-center bg-neutral text-neutral-content shadow-md p-6 rounded-lg mb-6">
@@ -104,19 +104,19 @@ const Dashboard = () => {
         {/* Resumo rápido */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="stat bg-primary text-primary-content rounded-lg p-4">
-            <div className="stat-title">Cursos disponíveis</div>
-            <div className="stat-value">{courses.length}</div>
-            <div className="stat-desc">Novos cursos em breve!</div>
+            <div className="stat-title text-inherit">Cursos disponíveis</div>
+            <div className="stat-value text-inherit">{courses.length}</div>
+            <div className="stat-desc text-inherit">Novos cursos em breve!</div>
           </div>
           <div className="stat bg-accent text-accent-content rounded-lg p-4">
-            <div className="stat-title">Progresso geral</div>
-            <div className="stat-value">68%</div>
-            <div className="stat-desc">Continue estudando!</div>
+            <div className="stat-title text-inherit">Progresso geral</div>
+            <div className="stat-value text-inherit">68%</div>
+            <div className="stat-desc text-inherit">Continue estudando!</div>
           </div>
           <div className="stat bg-success text-success-content rounded-lg p-4">
-            <div className="stat-title">Certificados emitidos</div>
-            <div className="stat-value">12</div>
-            <div className="stat-desc">Parabéns pelos seus certificados!</div>
+            <div className="stat-title text-inherit">Certificados emitidos</div>
+            <div className="stat-value text-inherit">12</div>
+            <div className="stat-desc text-inherit">Parabéns pelos seus certificados!</div>
           </div>
         </div>
 
