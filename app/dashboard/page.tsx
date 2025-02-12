@@ -21,19 +21,19 @@ interface Course {
 // Componente de Card de Curso
 const CourseCard = ({ course }: { course: Course }) => {
   return (
-    <div className="card bg-neutral text-neutral-content shadow-xl w-96 hover:shadow-2xl transition-shadow">
+    <div className="card bg-base-200 text-base-content shadow-md hover:shadow-lg transition-all duration-200 w-72">
       <figure>
         <img
           src={course.poster}
           alt={course.title}
-          className="w-full h-40 object-cover"
+          className="w-full h-32 object-cover transition-all duration-500 hover:scale-105"
         />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">{course.title}</h2>
-        <p className="text-sm">{course.description}</p>
+      <div className="card-body p-4">
+        <h2 className="card-title text-base-content text-lg">{course.title}</h2>
+        <p className="text-base-content text-sm line-clamp-4">{course.description}</p>
         <div className="card-actions justify-end">
-          <Link href={`/courses/${course.id}`} className="btn btn-primary">
+          <Link href={`/courses/${course.id}`} className="btn btn-primary btn-sm">
             Acessar o curso
           </Link>
         </div>
@@ -80,43 +80,43 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+        <span className="loading loading-spinner loading-md"></span>
       </div>
     );
   }
 
+  // Verificar se o nome foi carregado corretamente
+  const firstName = userData?.name?.split(" ")[0] || "Aluno"; // Garantir que não fique vazio
+
+  console.log("Nome do aluno:", userData?.name);  // Adicionando o log para verificar
+
   return (
-    <div className="min-h-screen p-6 bg-base-100">
+    <div className="min-h-screen p-4 bg-base-100">
       <div className="container mx-auto">
         {/* Header com boas-vindas e logout */}
-        <div className="flex justify-between items-center bg-neutral text-neutral-content shadow-md p-6 rounded-lg mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">
-              Bem-vindo de volta, {userData?.name || "Aluno"}!
-            </h1>
-            <p className="text-sm">Vamos continuar aprendendo!</p>
-          </div>
-          <button onClick={handleLogout} className="btn btn-error">
+        <div className="flex justify-between items-center bg-base-200 text-base-content shadow-sm p-4 rounded-lg mb-4">
+          <h1 className="text-xl font-semibold text-base-content">Bem-vindo, {firstName}!</h1>
+          <button onClick={handleLogout} className="btn btn-error btn-sm">
             Sair
           </button>
         </div>
 
         {/* Resumo rápido */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="stat bg-primary text-primary-content rounded-lg p-4">
-            <div className="stat-title text-inherit">Cursos disponíveis</div>
-            <div className="stat-value text-inherit">{courses.length}</div>
-            <div className="stat-desc text-inherit">Novos cursos em breve!</div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          <div className="stat bg-base-200 text-base-content rounded-lg p-3 shadow-sm">
+            <div className="stat-title text-sm">Cursos disponíveis</div>
+            <div className="stat-value text-xl">{courses.length}</div>
+            <div className="stat-desc text-xs">Novos cursos em breve!</div>
           </div>
-          <div className="stat bg-accent text-accent-content rounded-lg p-4">
-            <div className="stat-title text-inherit">Progresso geral</div>
-            <div className="stat-value text-inherit">68%</div>
-            <div className="stat-desc text-inherit">Continue estudando!</div>
+          <div className="stat bg-base-200 text-base-content rounded-lg p-3 shadow-sm">
+            <div className="stat-title text-sm">Progresso geral</div>
+            <div className="stat-value text-xl">68%</div>
+            <div className="stat-desc text-xs">Continue estudando!</div>
           </div>
-          <div className="stat bg-success text-success-content rounded-lg p-4">
-            <div className="stat-title text-inherit">Certificados emitidos</div>
-            <div className="stat-value text-inherit">12</div>
-            <div className="stat-desc text-inherit">Parabéns pelos seus certificados!</div>
+          <div className="stat bg-base-200 text-base-content rounded-lg p-3 shadow-sm">
+            <div className="stat-title text-sm">Certificados emitidos</div>
+            <div className="stat-value text-xl">12</div>
+            <div className="stat-desc text-xs">Parabéns pelos seus certificados!</div>
           </div>
         </div>
 
@@ -124,10 +124,10 @@ const Dashboard = () => {
         {error && <div className="alert alert-error">{error}</div>}
 
         {/* Lista de cursos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {coursesLoading ? (
             <div className="col-span-full text-center text-lg">
-              <span className="loading loading-spinner loading-lg"></span>
+              <span className="loading loading-spinner loading-md"></span>
             </div>
           ) : courses.length === 0 ? (
             <div className="col-span-full text-center text-lg">
