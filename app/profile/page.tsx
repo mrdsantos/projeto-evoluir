@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -60,8 +61,15 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null); // Para erros de validação de formulário
+  const [formError, setFormError] = useState<string | null>(null);
   const router = useRouter();
+
+  // Auth Guard: redireciona para login se não estiver autenticado
+  useEffect(() => {
+    if (!userData?.uid) {
+      router.push("/login");
+    }
+  }, [userData, router]);
 
   // Recupera os dados do perfil do usuário
   useEffect(() => {
@@ -88,29 +96,34 @@ const ProfilePage = () => {
     fetchProfile();
   }, [userData]);
 
-  // Atualiza os dados do perfil no banco de dados
+  // Atualiza os dados do perfil no Firestore
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile || !userData?.uid) return; // Verificação de userData
+    if (!profile || !userData?.uid) return;
 
-    // Validação do formulário
+    // Validação do formulário: todos os campos obrigatórios precisam estar preenchidos
     if (
       !profile.name ||
       !profile.phone ||
       !profile.whatsapp ||
       !profile.cpf ||
-      !profile.birthdate
+      !profile.birthdate ||
+      !profile.address?.street ||
+      !profile.address?.number ||
+      !profile.address?.neighborhood ||
+      !profile.address?.cep ||
+      !profile.address?.city ||
+      !profile.address?.state ||
+      !profile.address?.country
     ) {
       setFormError("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    setFormError(null); // Limpa o erro de formulário
+    setFormError(null);
 
     try {
       const userDocRef = doc(db, "users", userData.uid);
-
-      // Mapear apenas os campos necessários para atualização
       const updatedProfile = {
         name: profile.name,
         phone: profile.phone,
@@ -120,9 +133,7 @@ const ProfilePage = () => {
         address: profile.address,
       };
 
-      // Passar o objeto atualizado para o Firestore
       await updateDoc(userDocRef, updatedProfile);
-
       toast.success("Perfil atualizado com sucesso!");
       router.push("/dashboard");
     } catch (err) {
@@ -131,7 +142,7 @@ const ProfilePage = () => {
     }
   };
 
-  // Handle de inputs para dados pessoais; remove caracteres não numéricos para phone, whatsapp e cpf
+  // Atualiza os campos pessoais; remove caracteres não numéricos para phone, whatsapp e cpf
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let cleanedValue = value;
@@ -141,7 +152,7 @@ const ProfilePage = () => {
     setProfile((prev) => (prev ? { ...prev, [name]: cleanedValue } : null));
   };
 
-  // Handle de inputs para os campos do endereço; para CEP remove não-dígitos
+  // Atualiza os campos do endereço; para CEP remove caracteres não numéricos
   const handleAddressChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -177,11 +188,11 @@ const ProfilePage = () => {
         <h1 className="text-3xl font-bold mb-6">Atualizar Perfil</h1>
 
         {error && <div className="alert alert-error mb-4">{error}</div>}
-        {formError && <div className="alert alert-error mb-4">{formError}</div>} {/* Exibe o erro de validação */}
+        {formError && <div className="alert alert-error mb-4">{formError}</div>}
 
         <form onSubmit={handleSave} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Informações Pessoais */}
+            {/* Seção: Informações Pessoais */}
             <div className="col-span-1 sm:col-span-2">
               <h2 className="text-2xl font-semibold">Informações Pessoais</h2>
             </div>
@@ -223,7 +234,7 @@ const ProfilePage = () => {
               <input
                 type="text"
                 name="phone"
-                value={profile?.phone ? formatPhone(profile.phone) : ""}
+                value={profile?.phone || ""}
                 onChange={handleChange}
                 className="input input-bordered w-full"
                 placeholder="Telefone"
@@ -233,15 +244,15 @@ const ProfilePage = () => {
 
             <div className="col-span-1">
               <label className="label">
-                <span className="label-text">WhatsApp</span>
+                <span className="label-text">Whatsapp</span>
               </label>
               <input
                 type="text"
                 name="whatsapp"
-                value={profile?.whatsapp ? formatPhone(profile.whatsapp) : ""}
+                value={profile?.whatsapp || ""}
                 onChange={handleChange}
                 className="input input-bordered w-full"
-                placeholder="WhatsApp"
+                placeholder="Whatsapp"
                 required
               />
             </div>
@@ -253,11 +264,10 @@ const ProfilePage = () => {
               <input
                 type="text"
                 name="cpf"
-                value={profile?.cpf ? formatCPF(profile.cpf) : ""}
+                value={formatCPF(profile?.cpf || "")}
                 onChange={handleChange}
                 className="input input-bordered w-full"
                 placeholder="CPF"
-                maxLength={14}
                 required
               />
             </div>
@@ -276,7 +286,7 @@ const ProfilePage = () => {
               />
             </div>
 
-            {/* Endereço */}
+            {/* Seção: Endereço */}
             <div className="col-span-1 sm:col-span-2">
               <h2 className="text-2xl font-semibold">Endereço</h2>
             </div>
@@ -292,6 +302,7 @@ const ProfilePage = () => {
                 onChange={handleAddressChange}
                 className="input input-bordered w-full"
                 placeholder="Rua"
+                required
               />
             </div>
 
@@ -306,6 +317,7 @@ const ProfilePage = () => {
                 onChange={handleAddressChange}
                 className="input input-bordered w-full"
                 placeholder="Número"
+                required
               />
             </div>
 
@@ -320,6 +332,7 @@ const ProfilePage = () => {
                 onChange={handleAddressChange}
                 className="input input-bordered w-full"
                 placeholder="Bairro"
+                required
               />
             </div>
 
@@ -330,11 +343,11 @@ const ProfilePage = () => {
               <input
                 type="text"
                 name="cep"
-                value={profile?.address?.cep ? formatCEP(profile.address.cep) : ""}
+                value={formatCEP(profile?.address?.cep || "")}
                 onChange={handleAddressChange}
                 className="input input-bordered w-full"
                 placeholder="CEP"
-                maxLength={9}
+                required
               />
             </div>
 
@@ -349,6 +362,7 @@ const ProfilePage = () => {
                 onChange={handleAddressChange}
                 className="input input-bordered w-full"
                 placeholder="Cidade"
+                required
               />
             </div>
 
@@ -360,8 +374,10 @@ const ProfilePage = () => {
                 name="state"
                 value={profile?.address?.state || ""}
                 onChange={handleAddressChange}
-                className="select select-bordered w-full"
+                className="input input-bordered w-full"
+                required
               >
+                <option value="">Selecione o estado</option>
                 {statesBrazil.map((state) => (
                   <option key={state} value={state}>
                     {state}
@@ -378,8 +394,10 @@ const ProfilePage = () => {
                 name="country"
                 value={profile?.address?.country || ""}
                 onChange={handleAddressChange}
-                className="select select-bordered w-full"
+                className="input input-bordered w-full"
+                required
               >
+                <option value="">Selecione o país</option>
                 {countries.map((country) => (
                   <option key={country} value={country}>
                     {country}
@@ -389,15 +407,9 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              {loading ? "Salvando..." : "Salvar"}
-            </button>
-          </div>
+          <button type="submit" className="btn btn-primary mt-6 w-full">
+            Salvar alterações
+          </button>
         </form>
       </div>
     </div>

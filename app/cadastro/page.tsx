@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/lib/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const { signup } = useAuth();
@@ -11,6 +12,7 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // Hook para navegação
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ export default function SignupPage() {
     setError(null);
     try {
       await signup(email, password, name);
+      router.push("/profile"); // Redireciona para a página /profile após o cadastro bem-sucedido
     } catch (error) {
       setError("Erro ao criar conta. Verifique suas informações.");
     } finally {
@@ -26,16 +29,16 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-100 text-neutral-content p-6">
-      <div className="card w-full max-w-md bg-base-200 shadow-xl p-6 rounded-lg">
-        <h1 className="text-3xl font-bold text-primary mb-4 text-center">Crie sua Conta</h1>
-        <form onSubmit={handleSignup} className="flex flex-col gap-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-indigo-600 to-blue-500 text-neutral-content p-6">
+      <div className="card w-full max-w-md bg-base-200 shadow-xl p-8 rounded-2xl">
+        <h1 className="text-4xl font-semibold text-primary mb-6 text-center">Crie sua Conta</h1>
+        <form onSubmit={handleSignup} className="flex flex-col gap-6">
           <input 
             type="text" 
-            placeholder="Nome" 
+            placeholder="Nome"
             value={name} 
             onChange={(e) => setName(e.target.value)} 
-            className="input input-bordered w-full"
+            className="input input-bordered input-primary w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <input 
@@ -43,7 +46,7 @@ export default function SignupPage() {
             placeholder="Email" 
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
-            className="input input-bordered w-full"
+            className="input input-bordered input-primary w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <input 
@@ -51,17 +54,17 @@ export default function SignupPage() {
             placeholder="Senha" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
-            className="input input-bordered w-full"
+            className="input input-bordered input-primary w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <button 
             type="submit" 
-            className="btn btn-primary w-full text-primary-content"
+            className="btn btn-primary w-full text-primary-content text-lg rounded-xl shadow-md transition-all duration-300 ease-in-out hover:bg-primary-focus"
             disabled={loading}
           >
             {loading ? "Cadastrando..." : "Cadastrar"}
           </button>
-          {error && <p className="text-error text-center">{error}</p>}
+          {error && <p className="text-error text-center mt-3">{error}</p>}
         </form>
       </div>
     </div>

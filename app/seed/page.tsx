@@ -3,77 +3,63 @@
 import { db } from "@/lib/firebase/firebaseConfig";
 import { collection, doc, writeBatch } from "firebase/firestore";
 
-export default function FirestoreSeeder() {
-  const seedFirestore = async () => {
+export default function FirestoreSubmissionsSeeder() {
+  const seedSubmissions = async () => {
     const batch = writeBatch(db);
-    const timestamp = Date.now();
+    // Contador para incrementar o id da imagem no fileUrl
+    let submissionImageId = 1;
 
-    // Usuários
-    const users = [
-      { uid: "user1", name: "Alice", email: "alice@email.com", role: "aluno", progress: {}, createdAt: timestamp },
-      { uid: "user2", name: "Bob", email: "bob@email.com", role: "agente", progress: {}, createdAt: timestamp },
-      { uid: "user3", name: "Charlie", email: "charlie@email.com", role: "aluno", progress: {}, createdAt: timestamp },
-    ];
-
-    users.forEach((user) => {
-      const userRef = doc(collection(db, "users"), user.uid);
-      batch.set(userRef, user);
-    });
-
-    // Cursos
-    const courses = [
-      {
-        id: "course1",
-        title: "React Básico",
-        description: "Descubra o poder do React e aprenda a construir interfaces dinâmicas e interativas para a web. Neste curso introdutório, você conhecerá os fundamentos do React, incluindo componentes, props, estado e o ciclo de vida. Com exemplos práticos e explicações didáticas, você desenvolverá sua primeira aplicação React do zero!",
-        createdAt: timestamp,
-        poster: "https://via.assets.so/movie.png?w=360&h=360&fit=fill",
-      },
-      {
-        id: "course2",
-        title: "Next.js Avançado",
-        description: "Domine o Next.js e leve suas aplicações React para outro nível! Neste curso, você aprenderá a criar aplicações otimizadas, utilizando renderização híbrida (SSR e SSG), roteamento dinâmico e integração com APIs. Explore os benefícios do Next.js, como carregamento rápido, SEO aprimorado e deploy simplificado, e desenvolva projetos escaláveis e de alto desempenho.",
-        createdAt: timestamp,
-        poster: "https://via.assets.so/movie.png?w=360&h=360&fit=fill",
-      },
-      {
-        id: "course3",
-        title: "TypeScript para Iniciantes",
-        description: "Aprenda TypeScript e escreva códigos mais seguros e escaláveis! Este curso aborda os conceitos essenciais do TypeScript, desde tipos básicos até interfaces, classes e generics. Descubra como o TypeScript melhora a experiência de desenvolvimento ao reduzir erros e oferecer melhor autocompletar e documentação. Torne-se mais produtivo e escreva código mais confiável!",
-        createdAt: timestamp,
-        poster: "https://via.assets.so/movie.png?w=360&h=360&fit=fill",
-      },
-    ];
-
-    courses.forEach((course) => {
-      const courseRef = doc(collection(db, "courses"), course.id);
-      batch.set(courseRef, course);
-    });
-
-    // Aulas
+    // Lista das lessons dos 3 cursos com seus respectivos ids e títulos
     const lessons = [
-      { id: "lesson1", title: "Introdução ao React", videoUrl: "https://www.youtube.com/watch?v=hd2B7XQAFls", content: "Conteúdo da aula 1", order: 1, courseId: "course1" },
-      { id: "lesson2", title: "Componentes React", videoUrl: "https://www.youtube.com/watch?v=aJR7f45dBNs", content: "Conteúdo da aula 2", order: 2, courseId: "course1" },
-      { id: "lesson1", title: "Fundamentos do Next.js", videoUrl: "https://www.youtube.com/watch?v=QsSUbuYeEFk", content: "Conteúdo da aula 1", order: 1, courseId: "course2" },
-      { id: "lesson2", title: "Rotas e API no Next.js", videoUrl: "https://www.youtube.com/watch?v=e6FigV2fLC8", content: "Conteúdo da aula 2", order: 2, courseId: "course2" },
-      { id: "lesson1", title: "Introdução ao TypeScript", videoUrl: "https://www.youtube.com/watch?v=ppDsxbUNtNQ", content: "Conteúdo da aula 1", order: 1, courseId: "course3" },
-      { id: "lesson2", title: "Tipos e Interfaces", videoUrl: "https://www.youtube.com/watch?v=GWwuQl0jXU4", content: "Conteúdo da aula 2", order: 2, courseId: "course3" },
+      { courseId: "curso1", lessonId: "aula1", lessonTitle: "Introdução ao React" },
+      { courseId: "curso1", lessonId: "aula2", lessonTitle: "Componentes e Props" },
+      { courseId: "curso2", lessonId: "aula1", lessonTitle: "Introdução ao Next.js" },
+      { courseId: "curso2", lessonId: "aula2", lessonTitle: "Rotas Dinâmicas e API" },
+      { courseId: "curso3", lessonId: "aula1", lessonTitle: "Conceitos Básicos do TypeScript" },
+      { courseId: "curso3", lessonId: "aula2", lessonTitle: "Tipos, Interfaces e Generics" },
     ];
 
-    lessons.forEach((lesson) => {
-      const lessonRef = doc(collection(db, `courses/${lesson.courseId}/lessons`), lesson.id);
-      batch.set(lessonRef, lesson);
+    // Usuários que farão as submissions (usar os mesmos que já atualizamos)
+    const submissionUserIds = [
+      "CSQtNYQyCCcm59NWmt4ubh9qw9c2",
+      "JrW0NjjfneN63OOWFzZZkCwiRBA2",
+    ];
+
+    // Para cada lesson, cria 2 submissions pendentes
+    lessons.forEach(({ courseId, lessonId, lessonTitle }) => {
+      submissionUserIds.forEach((userId, index) => {
+        // Textos de resposta para o exercício
+        const submissionText =
+          index === 0
+            ? `Resposta da atividade "${lessonTitle}": implementei uma função de ordenação utilizando métodos nativos do JavaScript.`
+            : `Resposta da atividade "${lessonTitle}": utilizei async/await para lidar com requisições assíncronas e tratamento de erros.`;
+
+        const submission = {
+          createdAt: "11 de fevereiro de 2025 às 22:39:30 UTC-3",
+          fileUrl: `https://via.assets.so/movie.png?id=${submissionImageId}&q=95&w=360&h=360&fit=fill`,
+          status: "pendente",
+          text: submissionText,
+        };
+
+        submissionImageId++;
+
+        const submissionRef = doc(
+          collection(db, `courses/${courseId}/lessons/${lessonId}/submissions`),
+          userId
+        );
+        batch.set(submissionRef, submission);
+      });
     });
 
     await batch.commit();
-    alert("Usuários, cursos e aulas criados com sucesso!");
+    alert("Submissions populadas com sucesso!");
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold">Popular Firestore</h1>
-      <button onClick={seedFirestore} className="bg-blue-500 text-white p-2 rounded">
-        Criar Usuários, Cursos e Aulas
+      <h1 className="text-xl font-bold">Popular Submissions no Firestore</h1>
+      <button onClick={seedSubmissions} className="bg-blue-500 text-white p-2 rounded">
+        Criar Submissions
       </button>
     </div>
   );

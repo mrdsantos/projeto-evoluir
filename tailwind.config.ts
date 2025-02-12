@@ -21,6 +21,7 @@ const config: Config = {
   ],
   daisyui: {
     themes: [
+      "cyberpunk",
       "light",
       "dark",
       "cupcake",
@@ -29,7 +30,6 @@ const config: Config = {
       "corporate",
       "synthwave",
       "retro",
-      "cyberpunk",
       "valentine",
       "halloween",
       "garden",
@@ -54,12 +54,12 @@ const config: Config = {
       "nord",
       "sunset",
     ],
-    // darkTheme: "dim",
     base: true,
     styled: true,
     utils: true,
     logs: true,
     themeRoot: ":root",
+    theme: "cyberpunk"
   },
 };
 

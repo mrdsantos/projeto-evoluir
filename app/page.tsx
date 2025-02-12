@@ -17,9 +17,33 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-base-100 text-neutral-content p-6">
-      <div className="text-center max-w-2xl">
-        <h1 className="text-4xl font-bold text-primary mb-4">Bem-vindo ao Projeto Evoluir 🚀</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base-100 text-neutral-content mb-10">
+       {/* Hero Image */}
+       <div
+        className="hero bg-base-200 min-h-screen h-4/6"
+        style={{
+          backgroundImage: 'url(/home-1.jpg)',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="hero-content flex items-center justify-end w-full">
+          <div className="max-w-md text-right">
+            <h1 className="text-5xl font-bold mb-6 text-secondary-content drop-shadow-lg bg-secondary p-2 rounded-xl">
+              Transforme seu aprendizado com facilidade
+            </h1>
+            <p className="text-lg mb-6 text-accent-content drop-shadow-lg bg-accent p-2 rounded-xl">
+              Descubra cursos interativos e dinâmicos, com uma plataforma intuitiva que faz seu aprendizado acontecer de forma prática e eficaz.
+            </p>
+            <button className="btn btn-primary text-primary-content text-lg px-8 rounded-full hover:bg-primary-focus transition duration-300 ease-in-out">
+              Cadastre-se
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center max-w-2xl mt-6">
+        <h1 className="text-4xl font-bold text-primary mb-4">Bem-vindo ao Projeto Evoluir</h1>
         <p className="text-lg mb-6 text-base-content">
           Aprenda programação do zero ao avançado com cursos práticos e suporte especializado.
           Transforme sua carreira hoje mesmo!

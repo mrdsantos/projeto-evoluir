@@ -222,8 +222,15 @@ const LessonPage = () => {
           {uploading ? "Enviando..." : "Enviar Arquivo"}
         </button>
 
-        <div className="w-full h-64 bg-gray-200 flex justify-center items-center rounded-lg">
-          <span className="text-gray-500">Placeholder para exibição de PDF</span>
+        {/* Exibição do PDF com iframe */}
+        <div className="w-full h-[600px] bg-gray-200 flex justify-center items-center rounded-lg">
+          <iframe
+            src="https://firebasestorage.googleapis.com/v0/b/projeto-evoluir-7dcef.firebasestorage.app/o/courses%2Fpdf%2Fguia-de-estudos.pdf?alt=media&token=6a5a3b77-49c1-4ab9-a74f-fc6ac64a9745"
+            width="100%"
+            height="100%"
+            className="rounded-lg"
+            title="Guia de Estudos"
+          ></iframe>
         </div>
       </div>
     </div>
