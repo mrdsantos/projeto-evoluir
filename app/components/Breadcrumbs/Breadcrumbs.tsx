@@ -35,7 +35,7 @@ const Breadcrumbs = () => {
 
   return (
     <nav className="text-sm breadcrumbs">
-      <ul className="flex space-x-2 text-base-content opacity-80">
+      <ul className="flex space-x-2 text-base-content opacity-60">
         {localBreadcrumbs.map((name, index) => {
           // Monta o caminho completo até aquele ponto
           const href = index === 0 ? "/dashboard" : `/courses/${pathSegments[1]}`;
