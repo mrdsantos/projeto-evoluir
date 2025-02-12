@@ -1,64 +1,51 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useBreadcrumbs } from "@/lib/context/BreadcrumbsContext";
-import { useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebaseConfig";
+import { useEffect, useState } from "react";
+import { courseData } from "@/lib/data/coursesData"; // Importa o dicionário de cursos
 
 const Breadcrumbs = () => {
   const pathname = usePathname();
   const { breadcrumbs, setBreadcrumb } = useBreadcrumbs();
+  
+  // Estado local para armazenar os breadcrumbs
+  const [localBreadcrumbs, setLocalBreadcrumbs] = useState<string[]>([]);
 
   const pathSegments = pathname.split("/").filter(Boolean);
 
   useEffect(() => {
-    const fetchBreadcrumbName = async (key: string, collection: string, id: string) => {
-      if (!id || breadcrumbs[key]) return;
+    // Função para gerar breadcrumbs a partir do pathname
+    const newBreadcrumbs: string[] = [];
 
-      try {
-        const docRef = doc(db, collection, id);
-        const docSnap = await getDoc(docRef);
+    // Adicionar "Dashboard" e apontar corretamente para /dashboard
+    newBreadcrumbs.push("Dashboard");
 
-        if (docSnap.exists()) {
-          setBreadcrumb(key, docSnap.data().title);
-        }
-      } catch (error) {
-        console.error(`Erro ao buscar ${collection}:`, error);
-      }
-    };
-
+    // Verificar se é um caminho de curso
     if (pathSegments[0] === "courses" && pathSegments[1]) {
-      fetchBreadcrumbName(`course-${pathSegments[1]}`, "courses", pathSegments[1]);
+      const courseName = courseData[pathSegments[1]]?.title || "Curso";
+      newBreadcrumbs.push(courseName);
     }
 
-    if (pathSegments[0] === "courses" && pathSegments[1] && pathSegments[2] === "lessons" && pathSegments[3]) {
-      fetchBreadcrumbName(`lesson-${pathSegments[3]}`, `courses/${pathSegments[1]}/lessons`, pathSegments[3]);
-    }
-  }, [pathname, breadcrumbs, setBreadcrumb]);
-
-  const getBreadcrumbName = (segment: string, index: number) => {
-    if (segment === "dashboard") return "Dashboard";
-    if (segment === "courses" && pathSegments[index + 1]) return breadcrumbs[`course-${pathSegments[index + 1]}`] || "Curso";
-    if (segment === "lessons" && pathSegments[index + 1]) return breadcrumbs[`lesson-${pathSegments[index + 1]}`] || "Lição";
-    return null;
-  };
+    // Atualize o estado local com os novos breadcrumbs
+    setLocalBreadcrumbs(newBreadcrumbs);
+  }, [pathname]); // Dependência no pathname
 
   return (
     <nav className="text-sm breadcrumbs">
-      <ul className="flex space-x-2 text-primary">
-        {pathSegments.map((segment, index) => {
-          const name = getBreadcrumbName(segment, index);
-          if (!name) return null;
+      <ul className="flex space-x-2 text-base-content opacity-80">
+        {localBreadcrumbs.map((name, index) => {
+          // Monta o caminho completo até aquele ponto
+          const href = index === 0 ? "/dashboard" : `/courses/${pathSegments[1]}`;
 
-          const href = "/" + pathSegments.slice(0, index + 1).join("/");
           return (
             <li key={index}>
               <Link href={href} className="hover:underline">
                 {name}
               </Link>
-              {index < pathSegments.length - 1 && " > "}
+              {index < localBreadcrumbs.length - 1}
             </li>
           );
         })}

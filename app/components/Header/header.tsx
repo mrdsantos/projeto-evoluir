@@ -118,7 +118,9 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <Breadcrumbs />
+      <div className="flex flex-col items-center justify-items-center">
+        <Breadcrumbs />
+      </div>
     </div>
   );
 }
