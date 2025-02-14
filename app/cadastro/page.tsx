@@ -31,14 +31,14 @@ export default function SignupPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-indigo-600 to-blue-500 text-neutral-content p-6">
       <div className="card w-full max-w-md bg-base-200 shadow-xl p-8 rounded-2xl">
-        <h1 className="text-4xl font-semibold text-primary mb-6 text-center">Crie sua Conta</h1>
+        <h1 className="text-4xl font-semibold text-primary-content mb-6 text-center">Crie sua Conta</h1>
         <form onSubmit={handleSignup} className="flex flex-col gap-6">
           <input 
             type="text" 
             placeholder="Nome"
             value={name} 
             onChange={(e) => setName(e.target.value)} 
-            className="input input-bordered input-primary w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="input input-bordered input-primary text-primary-content w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <input 
@@ -46,7 +46,7 @@ export default function SignupPage() {
             placeholder="Email" 
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
-            className="input input-bordered input-primary w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="input input-bordered input-primary text-primary-content w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <input 
@@ -54,7 +54,7 @@ export default function SignupPage() {
             placeholder="Senha" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
-            className="input input-bordered input-primary w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="input input-bordered input-primary text-primary-content w-full rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <button 
