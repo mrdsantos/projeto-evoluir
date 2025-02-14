@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -90,6 +89,9 @@ const Dashboard = () => {
 
   console.log("Nome do aluno:", userData?.name);  // Adicionando o log para verificar
 
+  // Checa se o usuário tem a role de 'agente'
+  const isAgent = userData?.role === "agente";
+
   return (
     <div className="min-h-screen p-4 bg-base-100">
       <div className="container mx-auto">
@@ -100,6 +102,22 @@ const Dashboard = () => {
             Sair
           </button>
         </div>
+
+        {/* Botões de ação (visíveis apenas se o usuário for "agente") */}
+        {isAgent && (
+          <div className="flex justify-center gap-4 mb-4">
+            <Link href="/dashboardagente">
+              <button className="btn btn-warning btn-lg">
+                Avaliar Respostas
+              </button>
+            </Link>
+            <Link href="/cursosagente">
+              <button className="btn btn-success btn-lg">
+                Cursos
+              </button>
+            </Link>
+          </div>
+        )}
 
         {/* Resumo rápido */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
