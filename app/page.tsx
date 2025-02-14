@@ -35,9 +35,11 @@ export default function Home() {
             <p className="text-lg mb-6 text-accent-content drop-shadow-lg bg-accent p-2 rounded-xl">
               Descubra cursos interativos e dinâmicos, com uma plataforma intuitiva que faz seu aprendizado acontecer de forma prática e eficaz.
             </p>
-            <button className="btn btn-primary text-primary-content text-lg px-8 rounded-full hover:bg-primary-focus transition duration-300 ease-in-out">
-              Cadastre-se
-            </button>
+            <Link href="/cadastro">
+              <button className="btn btn-primary text-primary-content text-lg px-8 rounded-full hover:bg-primary-focus transition duration-300 ease-in-out">
+                Cadastre-se
+              </button>
+            </Link>
           </div>
         </div>
       </div>
