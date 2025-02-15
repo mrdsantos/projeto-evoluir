@@ -114,7 +114,7 @@ const Dashboard = () => {
             </Link>
             <Link href="/cursosagente">
               <button className="btn btn-success btn-lg">
-                Cursos
+                Gerenciar Cursos
               </button>
             </Link>
           </div>
